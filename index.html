@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sci-Fi Loader Portal | Hunter Store 🧃</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-dark: #070a12;
+  --panel-bg: rgba(13, 20, 36, 0.95);
+  --primary: #00f0ff;
+  --primary-glow: rgba(0, 240, 255, 0.35);
+  --free-green: #00ff66;
+  --free-glow: rgba(0, 255, 102, 0.35);
+  --text-main: #e2e8f0;
+  --text-muted: #64748b;
+  --border-line: rgba(0, 240, 255, 0.25);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0; padding: 0;
+  font-family: 'Rajdhani', sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-image:
+    radial-gradient(circle at 50% 0%, rgba(0, 240, 255, 0.08) 0%, transparent 50%),
+    linear-gradient(rgba(0, 240, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 240, 255, 0.02) 1px, transparent 1px);
+  background-size: 100% 100%, 20px 20px, 20px 20px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+#starfield {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 240, 255, 0.02) 0px,
+    rgba(0, 240, 255, 0.02) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  pointer-events: none;
+  z-index: 1;
+  mix-blend-mode: overlay;
+}
+
+/* NAVBAR */
+.navbar {
+  background: rgba(7, 10, 18, 0.95);
+  border-bottom: 1px solid var(--border-line);
+  padding: 14px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: blur(8px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.brand {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: 1.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand i { color: var(--primary); }
+
+.glitch { position: relative; display: inline-block; }
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  overflow: hidden;
+}
+.glitch::before {
+  color: #ff0055;
+  animation: glitch 3s infinite;
+  clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+}
+.glitch::after {
+  color: var(--primary);
+  animation: glitch 2.5s infinite reverse;
+  clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+}
+@keyframes glitch {
+  0%, 90%, 100% { transform: translate(0); }
+  92% { transform: translate(-2px, 1px); }
+  94% { transform: translate(2px, -1px); }
+  96% { transform: translate(-1px, -1px); }
+  98% { transform: translate(1px, 1px); }
+}
+
+/* MAIN */
+.main-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  position: relative;
+  z-index: 2;
+}
+
+.dashboard-box {
+  background: var(--panel-bg);
+  border: 1px solid var(--border-line);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 30px var(--primary-glow);
+  transition: box-shadow 0.3s ease;
+}
+
+.dashboard-box:hover {
+  box-shadow: 0 0 50px var(--primary-glow), 0 0 80px rgba(0, 240, 255, 0.15);
+}
+
+.box-header {
+  background: rgba(0, 0, 0, 0.5);
+  border-bottom: 1px solid var(--border-line);
+  padding: 12px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.85rem;
+  color: var(--primary);
+}
+
+.box-header .status-tag {
+  display: inline-block;
+  background: var(--free-green);
+  color: #000;
+  font-size: 0.6rem;
+  padding: 2px 7px;
+  border-radius: 3px;
+  margin-left: 8px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.box-body {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.box-body img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.box-body img.loaded { opacity: 1; }
+
+.box-body::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #0d1424 0%, #1a2540 50%, #0d1424 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  z-index: 0;
+}
+
+.box-body.loaded::before { display: none; }
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.box-body .loading-text {
+  position: absolute;
+  z-index: 2;
+  font-family: 'Share Tech Mono', monospace;
+  color: var(--primary);
+  font-size: 0.85rem;
+  letter-spacing: 2px;
+  animation: blinkText 1s infinite;
+}
+
+@keyframes blinkText {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.box-body.loaded .loading-text { display: none; }
+
+.download-btn {
+  width: 100%;
+  padding: 18px;
+  background: rgba(0, 255, 102, 0.08);
+  border: none;
+  border-top: 1px solid var(--free-green);
+  color: var(--free-green);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.download-btn:hover {
+  background: var(--free-green);
+  color: #000;
+  box-shadow: 0 0 30px var(--free-glow);
+}
+
+.download-btn:active { transform: scale(0.98); }
+
+.download-count {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  opacity: 0.8;
+  margin-left: 4px;
+}
+
+/* SUPPORT */
+.floating-support-container {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  z-index: 999;
+}
+
+.circle-support-btn {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #0d1424;
+  border: 2px solid var(--primary);
+  color: var(--primary);
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 0 20px var(--primary-glow);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.circle-support-btn::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid var(--primary);
+  animation: ripple 2s infinite;
+}
+
+@keyframes ripple {
+  0% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+
+.circle-support-btn:hover {
+  transform: scale(1.1);
+  background: var(--primary);
+  color: #000;
+}
+
+.support-popover-menu {
+  position: absolute;
+  bottom: 70px;
+  right: 0;
+  width: 320px;
+  max-width: calc(100vw - 40px);
+  background: rgba(11, 17, 32, 0.98);
+  border: 1px solid var(--primary);
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9), 0 0 20px var(--primary-glow);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(15px) scale(0.95);
+  transition: all 0.25s ease;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.floating-support-container.active .support-popover-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+.popover-header {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.8rem;
+  color: var(--primary);
+  border-bottom: 1px solid var(--border-line);
+  padding-bottom: 6px;
+  margin-bottom: 4px;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+.social-item {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 9px 12px;
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--text-main);
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: 0.2s;
+}
+
+.social-item:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: rgba(0, 240, 255, 0.1);
+}
+
+/* FOOTER */
+footer {
+  text-align: center;
+  padding: 20px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  position: relative;
+  z-index: 2;
+}
+
+footer .heart {
+  color: #ff0055;
+  animation: heartbeat 1.2s infinite;
+  display: inline-block;
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+/* MODAL */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(3, 7, 18, 0.85);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.25s ease;
+  z-index: 1000;
+  padding: 15px;
+}
+
+.modal-overlay.active { opacity: 1; pointer-events: auto; }
+
+.modal-card {
+  background: #0d1424;
+  border: 1px solid var(--primary);
+  width: 100%;
+  max-width: 420px;
+  max-height: 85vh;
+  overflow-y: auto;
+  border-radius: 8px;
+  padding: 22px;
+  box-shadow: 0 0 30px var(--primary-glow);
+  text-align: center;
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+}
+
+.modal-overlay.active .modal-card { transform: scale(1); }
+
+.modal-card h3 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.05rem;
+  color: var(--primary);
+  margin-bottom: 12px;
+}
+
+.modal-card p {
+  font-size: 0.9rem;
+  color: var(--text-main);
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+.price-list {
+  text-align: left;
+  background: rgba(0, 240, 255, 0.05);
+  border-left: 3px solid var(--primary);
+  padding: 10px 14px;
+  border-radius: 4px;
+  margin: 10px 0 16px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.8rem;
+  line-height: 1.8;
+}
+
+.price-list .price { color: var(--free-green); font-weight: 700; }
+
+.modal-action-btn {
+  width: 100%;
+  padding: 12px;
+  background: var(--primary);
+  border: none;
+  border-radius: 4px;
+  color: #000;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: 0.2s;
+  letter-spacing: 1px;
+}
+
+.modal-action-btn:hover { box-shadow: 0 0 20px var(--primary); }
+
+/* JOIN PROGRESS */
+.join-progress-wrap { margin: 10px 0 14px; }
+
+.join-progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 5px;
+}
+
+.join-progress-bar {
+  width: 100%;
+  height: 8px;
+  background: rgba(0, 255, 102, 0.12);
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 255, 102, 0.25);
+}
+
+.join-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--free-green), #00ffcc);
+  width: 0%;
+  transition: width 0.5s ease;
+  box-shadow: 0 0 12px var(--free-glow);
+}
+
+.channel-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 12px 0;
+  max-height: 260px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.channel-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 11px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: 0.25s;
+}
+
+.channel-item.active {
+  background: rgba(0, 240, 255, 0.12);
+  border-color: var(--primary);
+  box-shadow: 0 0 12px var(--primary-glow);
+}
+
+.channel-item.done {
+  background: rgba(0, 255, 102, 0.1);
+  border-color: var(--free-green);
+  color: var(--free-green);
+}
+
+.channel-item .ch-icon {
+  width: 22px;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.channel-item .ch-name {
+  flex: 1;
+  text-align: left;
+  font-size: 0.78rem;
+}
+
+.channel-item .ch-status {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  min-width: 72px;
+  text-align: right;
+}
+
+.channel-item.done .ch-status { color: var(--free-green); }
+.channel-item.active .ch-status { color: var(--primary); animation: blinkText 1s infinite; }
+
+/* WAITING UI */
+.waiting-spinner {
+  width: 50px;
+  height: 50px;
+  margin: 10px auto;
+  border: 4px solid rgba(0, 255, 102, 0.15);
+  border-top-color: var(--free-green);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.waiting-timer {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.6rem;
+  color: var(--free-green);
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-shadow: 0 0 15px var(--free-glow);
+  margin: 8px 0;
+  text-align: center;
+}
+
+.waiting-timer.done {
+  color: #fff;
+  text-shadow: 0 0 20px #fff, 0 0 30px var(--free-green);
+}
+
+.waiting-hint {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-family: 'Share Tech Mono', monospace;
+  margin-top: 8px;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.current-channel-name {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.82rem;
+  color: var(--primary);
+  margin-top: 4px;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+.auto-note {
+  display: inline-block;
+  background: rgba(0, 240, 255, 0.1);
+  border: 1px dashed var(--primary);
+  color: var(--primary);
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-family: 'Share Tech Mono', monospace;
+  margin-top: 10px;
+  letter-spacing: 0.5px;
+}
+
+/* COUNTDOWN */
+.countdown-display {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 3rem;
+  color: var(--free-green);
+  margin: 15px 0;
+  text-shadow: 0 0 20px var(--free-glow);
+  font-weight: 900;
+}
+
+.countdown-bar {
+  width: 100%;
+  height: 4px;
+  background: rgba(0, 255, 102, 0.15);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.countdown-bar-fill {
+  height: 100%;
+  background: var(--free-green);
+  width: 100%;
+  transition: width 1s linear;
+}
+
+/* TOAST */
+.toast-container {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.toast {
+  background: rgba(13, 20, 36, 0.98);
+  border: 1px solid var(--primary);
+  border-left: 4px solid var(--primary);
+  padding: 12px 16px;
+  border-radius: 6px;
+  color: var(--text-main);
+  font-size: 0.85rem;
+  font-weight: 600;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transform: translateX(120%);
+  animation: toastIn 0.4s forwards;
+  pointer-events: auto;
+  max-width: 300px;
+}
+
+.toast.success { border-color: var(--free-green); border-left-color: var(--free-green); }
+.toast.success i { color: var(--free-green); }
+.toast i { color: var(--primary); }
+
+@keyframes toastIn { to { transform: translateX(0); } }
+
+.toast.out { animation: toastOut 0.4s forwards; }
+@keyframes toastOut { to { transform: translateX(120%); opacity: 0; } }
+
+@media (max-width: 600px) {
+  .brand { font-size: 0.9rem; }
+  .box-header { font-size: 0.72rem; padding: 10px 12px; }
+  .box-header .status-tag { display: none; }
+  .download-btn { font-size: 0.9rem; padding: 15px; }
+  .circle-support-btn { width: 52px; height: 52px; font-size: 1.2rem; }
+  .support-popover-menu { width: calc(100vw - 50px); }
+  .modal-card { padding: 18px; }
+  .toast-container { right: 10px; top: 70px; }
+  .toast { max-width: 260px; font-size: 0.78rem; }
+  .waiting-timer { font-size: 1.3rem; }
+  .channel-item { font-size: 0.72rem; padding: 7px 9px; }
+}
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #0d1424; }
+::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<canvas id="starfield"></canvas>
+
+<nav class="navbar">
+  <div class="brand">
+    <i class="fa-solid fa-microchip"></i>
+    <span class="glitch" data-text="Hunter Store 🧃">Hunter Store 🧃</span>
+  </div>
+</nav>
+
+<div class="main-container">
+
+  <div class="dashboard-box">
+    <div class="box-header">
+      <span><i class="fa-solid fa-gamepad"></i> FREE FIRE THƯỜNG IOS #1 <span class="status-tag">HOT</span></span>
+      <span style="font-family:'Share Tech Mono'; font-size:0.75rem; color:var(--text-muted);">#MB-2026-01</span>
+    </div>
+    <div class="box-body" id="body1">
+      <span class="loading-text">▌ LOADING FRAME ▌</span>
+      <img id="demoFrame1" src="" alt="Demo 1">
+    </div>
+    <button type="button" class="download-btn" data-id="1">
+      <i class="fa-solid fa-download"></i> DOWNLOAD #1
+      <span class="download-count">(<span class="dl-count" data-id="1">0</span>)</span>
+    </button>
+  </div>
+
+  <div class="dashboard-box">
+    <div class="box-header">
+      <span><i class="fa-solid fa-gamepad"></i> FREE FIRE MAX IOS #2 <span class="status-tag">NEW</span></span>
+      <span style="font-family:'Share Tech Mono'; font-size:0.75rem; color:var(--text-muted);">#MB-2026-02</span>
+    </div>
+    <div class="box-body" id="body2">
+      <span class="loading-text">▌ LOADING FRAME ▌</span>
+      <img id="demoFrame2" src="" alt="Demo 2">
+    </div>
+    <button type="button" class="download-btn" data-id="2">
+      <i class="fa-solid fa-download"></i> DOWNLOAD #2
+      <span class="download-count">(<span class="dl-count" data-id="2">0</span>)</span>
+    </button>
+  </div>
+
+  <div class="dashboard-box">
+    <div class="box-header">
+      <span><i class="fa-solid fa-gamepad"></i> DỰ ÁN MOD V.I.P #3 <span class="status-tag">VIP</span></span>
+      <span style="font-family:'Share Tech Mono'; font-size:0.75rem; color:var(--text-muted);">#MB-2026-03</span>
+    </div>
+    <div class="box-body" id="body3">
+      <span class="loading-text">▌ LOADING FRAME ▌</span>
+      <img id="demoFrame3" src="" alt="Demo 3">
+    </div>
+    <button type="button" class="download-btn" data-id="3">
+      <i class="fa-solid fa-download"></i> DOWNLOAD #3
+      <span class="download-count">(<span class="dl-count" data-id="3">0</span>)</span>
+    </button>
+  </div>
+
+  <div class="dashboard-box">
+    <div class="box-header">
+      <span><i class="fa-solid fa-gamepad"></i> DỰ ÁN BẢO VỆ #4 <span class="status-tag">SAFE</span></span>
+      <span style="font-family:'Share Tech Mono'; font-size:0.75rem; color:var(--text-muted);">#MB-2026-04</span>
+    </div>
+    <div class="box-body" id="body4">
+      <span class="loading-text">▌ LOADING FRAME ▌</span>
+      <img id="demoFrame4" src="" alt="Demo 4">
+    </div>
+    <button type="button" class="download-btn" data-id="4">
+      <i class="fa-solid fa-download"></i> DOWNLOAD #4
+      <span class="download-count">(<span class="dl-count" data-id="4">0</span>)</span>
+    </button>
+  </div>
+
+  <div class="dashboard-box">
+    <div class="box-header">
+      <span><i class="fa-solid fa-gamepad"></i> BẢN CẬP NHẬT MỚI #5 <span class="status-tag">UPDATE</span></span>
+      <span style="font-family:'Share Tech Mono'; font-size:0.75rem; color:var(--text-muted);">#MB-2026-05</span>
+    </div>
+    <div class="box-body" id="body5">
+      <span class="loading-text">▌ LOADING FRAME ▌</span>
+      <img id="demoFrame5" src="" alt="Demo 5">
+    </div>
+    <button type="button" class="download-btn" data-id="5">
+      <i class="fa-solid fa-download"></i> DOWNLOAD #5
+      <span class="download-count">(<span class="dl-count" data-id="5">0</span>)</span>
+    </button>
+  </div>
+
+</div>
+
+<div class="floating-support-container" id="floatingSupport">
+  <div class="support-popover-menu">
+    <div class="popover-header"><i class="fa-solid fa-headset"></i> KÊNH HỖ TRỢ CHÍNH THỨC</div>
+    <a href="https://t.me/muadong_paris" target="_blank" rel="noopener" class="social-item">
+      <i class="fa-brands fa-telegram" style="color:#0088cc;"></i> @muadong_paris (Support)
+    </a>
+    <a href="https://www.tiktok.com/@nguyenminhbeo001" target="_blank" rel="noopener" class="social-item">
+      <i class="fa-brands fa-tiktok" style="color:#ff0055;"></i> @nguyenminhbeo001 (TikTok)
+    </a>
+    <a href="https://t.me/minhbeo001" target="_blank" rel="noopener" class="social-item">
+      <i class="fa-brands fa-telegram" style="color:#0088cc;"></i> @minhbeo001 (Kênh Chính)
+    </a>
+    <a href="https://t.me/minhbeostore" target="_blank" rel="noopener" class="social-item">
+      <i class="fa-brands fa-telegram" style="color:#0088cc;"></i> @minhbeostore (Kênh Phụ)
+    </a>
+    <a href="https://t.me/minhbeo003" target="_blank" rel="noopener" class="social-item">
+      <i class="fa-brands fa-telegram" style="color:#0088cc;"></i> @minhbeo003 (Update)
+    </a>
+    <a href="https://t.me/minhbeo002" target="_blank" rel="noopener" class="social-item">
+      <i class="fa-brands fa-telegram" style="color:#0088cc;"></i> @minhbeo002 (Kênh Chat)
+    </a>
+  </div>
+
+  <button type="button" class="circle-support-btn" id="supportBtn" aria-label="Support">
+    <i class="fa-solid fa-headset"></i>
+  </button>
+</div>
+
+<footer>
+  © 2026 MINH BEO COMMUNITY. Made with <span class="heart">❤</span> in Vietnam
+</footer>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- WELCOME MODAL -->
+<div class="modal-overlay" id="welcomeModal">
+  <div class="modal-card">
+    <h3><i class="fa-solid fa-bullhorn"></i> THÔNG BÁO</h3>
+    <p style="text-align:center;">Chào mừng bạn đến với <b style="color:var(--primary);">Hunter Store 🧃</b><br>
+    Đặt Mod Theo Yêu Cầu / Vui Lòng Liên Hệ Admin Ở Phần Support</p>
+
+    <div class="price-list">
+      <div>▸ Mod Bom Keo — <span class="price">5.000đ</span> / 1 lần</div>
+      <div>▸ Mod Skin Alok — <span class="price">50.000đ</span> / 1 lần</div>
+      <div>▸ Mod Skin Ignis Full Hiệu Ứng — <span class="price">75.000đ</span></div>
+      <div>▸ Mod Skin Santino — <span class="price">75.000đ</span></div>
+      <div>▸ Mod Skin Kapella — <span class="price">75.000đ</span></div>
+      <div>▸ Mod Skin Dimitri — <span class="price">50.000đ</span></div>
+      <div>▸ Mod Skin Súng — <span class="price">36.000đ</span></div>
+    </div>
+
+    <button type="button" class="modal-action-btn" id="closeWelcomeBtn">ĐÓNG</button>
+  </div>
+</div>
+
+<!-- JOIN MODAL -->
+<div class="modal-overlay" id="waitingModal">
+  <div class="modal-card" style="border-color: var(--free-green); max-width: 430px;">
+    <h3 style="color: var(--free-green);"><i class="fa-brands fa-telegram"></i> YÊU CẦU JOIN KÊNH</h3>
+
+    <div class="join-progress-wrap">
+      <div class="join-progress-label">
+        <span>TIẾN TRÌNH</span>
+        <span id="progressText">0 / 6</span>
+      </div>
+      <div class="join-progress-bar">
+        <div class="join-progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+
+    <div class="channel-list" id="channelList"></div>
+
+    <div class="waiting-spinner" id="waitingSpinner"></div>
+    <div class="waiting-timer" id="waitingTimer">5s</div>
+    <div class="current-channel-name" id="currentChannelName"></div>
+    <div class="waiting-hint" id="waitingHint">▌ Đang mở Telegram... ở lại 10s ▌</div>
+
+    <div class="auto-note">
+      <i class="fa-solid fa-wand-magic-sparkles"></i>
+      HỆ THỐNG TỰ ĐỘNG CHUYỂN KÊNH
+    </div>
+  </div>
+</div>
+
+<!-- COUNTDOWN MODAL -->
+<div class="modal-overlay" id="countdownModal">
+  <div class="modal-card" style="border-color: var(--free-green); max-width: 340px;">
+    <h3 style="color: var(--free-green);"><i class="fa-solid fa-hourglass-half"></i> ĐANG CHUẨN BỊ LINK</h3>
+    <div class="countdown-display" id="countdownNumber">3</div>
+    <div class="countdown-bar">
+      <div class="countdown-bar-fill" id="countdownBar"></div>
+    </div>
+    <p style="text-align:center; font-size: 0.8rem; color: var(--text-muted);">
+      Hệ thống đang xử lý yêu cầu tải xuống...
+    </p>
+  </div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  // ============ CONFIG ============
+  var SPEECH_TEXT = "Bản quyền mod thuộc về nguyen minh beo";
+  var WAIT_SECONDS = 10;
+
+  var CHANNELS = [
+    { id: 'c1', name: '@minhbeo001 (Kênh Chính)',   url: 'https://t.me/minhbeo001',    icon: 'fa-brands fa-telegram', color: '#0088cc' },
+    { id: 'c2', name: '@minhbeostore (Kênh Phụ)',   url: 'https://t.me/minhbeostore',  icon: 'fa-brands fa-telegram', color: '#0088cc' },
+    { id: 'c3', name: '@minhbeo003 (Update)',       url: 'https://t.me/minhbeo003',    icon: 'fa-brands fa-telegram', color: '#0088cc' },
+    { id: 'c4', name: '@minhbeo002 (Kênh Chat)',    url: 'https://t.me/minhbeo002',    icon: 'fa-brands fa-telegram', color: '#0088cc' },
+    { id: 'c5', name: '@muadong_paris (Support)',   url: 'https://t.me/muadong_paris', icon: 'fa-brands fa-telegram', color: '#0088cc' },
+    { id: 'c6', name: '@nguyenminhbeo001 (TikTok)', url: 'https://www.tiktok.com/@nguyenminhbeo001', icon: 'fa-brands fa-tiktok', color: '#ff0055' }
+  ];
+
+  var DEMO_CONFIG = {
+    1: { demoUrl: "https://files.catbox.moe/fjhaur.png", downloadUrl: "https://link4m.org/go/sxdtQdV6" },
+    2: { demoUrl: "https://files.catbox.moe/fjhaur.png", downloadUrl: "https://link4m.org/go/sxdtQdV6" },
+    3: { demoUrl: "https://files.catbox.moe/fjhaur.png", downloadUrl: "https://link4m.org/go/sxdtQdV6" },
+    4: { demoUrl: "https://files.catbox.moe/fjhaur.png", downloadUrl: "https://link4m.org/go/sxdtQdV6" },
+    5: { demoUrl: "https://files.catbox.moe/fjhaur.png", downloadUrl: "https://link4m.org/go/sxdtQdV6" }
+  };
+
+  // ============ STATE ============
+  var activeDownloadId = null;
+  var hasSpoken = false;
+  var countdownInterval = null;
+  var currentChannelIndex = -1;
+  var channelWaitStart = null;
+  var channelWaitInterval = null;
+  var isWaitingChannel = false;
+  var visibilityAttached = false;
+
+  // ============ STORAGE HELPERS ============
+  var memStore = {};
+  function storeGet(k) {
+    try { return localStorage.getItem(k); }
+    catch (e) { return memStore[k] || null; }
+  }
+  function storeSet(k, v) {
+    try { localStorage.setItem(k, v); }
+    catch (e) { memStore[k] = v; }
+  }
+
+  function getJoinedChannels() {
+    try { return JSON.parse(storeGet('joinedChannels') || '[]'); }
+    catch (e) { return []; }
+  }
+  function markChannelJoined(id) {
+    var arr = getJoinedChannels();
+    if (arr.indexOf(id) === -1) {
+      arr.push(id);
+      storeSet('joinedChannels', JSON.stringify(arr));
+    }
+  }
+  function allChannelsJoined() {
+    var arr = getJoinedChannels();
+    for (var i = 0; i < CHANNELS.length; i++) {
+      if (arr.indexOf(CHANNELS[i].id) === -1) return false;
+    }
+    return true;
+  }
+
+  // ============ DOM HELPERS ============
+  function $(id) { return document.getElementById(id); }
+
+  function openModal(id) {
+    var el = $(id);
+    if (el) el.classList.add('active');
+  }
+  function closeModal(id) {
+    var el = $(id);
+    if (el) el.classList.remove('active');
+  }
+
+  // ============ TOAST ============
+  function showToast(msg, type, duration) {
+    type = type || 'info';
+    duration = duration || 3000;
+    var container = $('toastContainer');
+    if (!container) return;
+    var toast = document.createElement('div');
+    toast.className = 'toast ' + type;
+    var icon = type === 'success' ? 'fa-check-circle'
+             : type === 'error' ? 'fa-exclamation-triangle'
+             : 'fa-info-circle';
+    toast.innerHTML = '<i class="fa-solid ' + icon + '"></i><span>' + msg + '</span>';
+    container.appendChild(toast);
+    setTimeout(function() {
+      toast.classList.add('out');
+      setTimeout(function() {
+        if (toast.parentNode) toast.parentNode.removeChild(toast);
+      }, 400);
+    }, duration);
+  }
+
+  // ============ SPEECH ============
+  function speakCopyright() {
+    if (hasSpoken) return;
+    try {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        var u = new SpeechSynthesisUtterance(SPEECH_TEXT);
+        u.lang = 'vi-VN';
+        u.rate = 0.95;
+        window.speechSynthesis.speak(u);
+        hasSpoken = true;
+      }
+    } catch (e) {}
+  }
+
+  // ============ STARFIELD ============
+  function initStarfield() {
+    try {
+      var canvas = $('starfield');
+      if (!canvas) return;
+      var ctx = canvas.getContext('2d');
+      if (!ctx) return;
+      var stars = [];
+
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        stars = [];
+        var count = Math.floor((canvas.width * canvas.height) / 12000);
+        for (var i = 0; i < count; i++) {
+          stars.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            r: Math.random() * 1.4 + 0.2,
+            vx: (Math.random() - 0.5) * 0.15,
+            vy: (Math.random() - 0.5) * 0.15,
+            a: Math.random() * 0.6 + 0.2
+          });
+        }
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (var i = 0; i < stars.length; i++) {
+          var s = stars[i];
+          s.x += s.vx;
+          s.y += s.vy;
+          if (s.x < 0) s.x = canvas.width;
+          if (s.x > canvas.width) s.x = 0;
+          if (s.y < 0) s.y = canvas.height;
+          if (s.y > canvas.height) s.y = 0;
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(0, 240, 255, ' + s.a + ')';
+          ctx.fill();
+        }
+        requestAnimationFrame(draw);
+      }
+
+      resize();
+      window.addEventListener('resize', resize);
+      draw();
+    } catch (e) {}
+  }
+
+  // ============ DOWNLOAD COUNT ============
+  function updateAllDownloadCounts() {
+    try {
+      var els = document.querySelectorAll('.dl-count');
+      for (var i = 0; i < els.length; i++) {
+        var id = els[i].getAttribute('data-id');
+        var c = parseInt(storeGet('dl_count_' + id) || '0', 10);
+        els[i].textContent = c;
+      }
+    } catch (e) {}
+  }
+
+  function incrementDownloadCount(id) {
+    var c = parseInt(storeGet('dl_count_' + id) || '0', 10);
+    storeSet('dl_count_' + id, String(c + 1));
+    updateAllDownloadCounts();
+  }
+
+  // ============ RENDER CHANNEL LIST ============
+  function renderChannelList() {
+    var list = $('channelList');
+    if (!list) return;
+    var joined = getJoinedChannels();
+    list.innerHTML = '';
+
+    for (var i = 0; i < CHANNELS.length; i++) {
+      var ch = CHANNELS[i];
+      var done = joined.indexOf(ch.id) !== -1;
+      var active = !done && i === currentChannelIndex;
+
+      var item = document.createElement('div');
+      item.className = 'channel-item' + (done ? ' done' : '') + (active ? ' active' : '');
+
+      var status = done ? '✓ ĐÃ JOIN' : (active ? 'ĐANG MỞ...' : 'CHƯA JOIN');
+      item.innerHTML =
+        '<span class="ch-icon" style="color:' + ch.color + ';"><i class="' + ch.icon + '"></i></span>' +
+        '<span class="ch-name">' + ch.name + '</span>' +
+        '<span class="ch-status">' + status + '</span>';
+
+      list.appendChild(item);
+    }
+
+    var total = CHANNELS.length;
+    var doneCount = joined.length;
+    var pt = $('progressText');
+    var pf = $('progressFill');
+    if (pt) pt.textContent = doneCount + ' / ' + total;
+    if (pf) pf.style.width = ((doneCount / total) * 100) + '%';
+  }
+
+  // ============ OPEN URL ============
+  function openUrl(url) {
+    try {
+      var a = document.createElement('a');
+      a.href = url;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(function() {
+        if (a.parentNode) a.parentNode.removeChild(a);
+      }, 200);
+    } catch (e) {
+      try { window.open(url, '_blank'); } catch (e2) {}
+    }
+  }
+
+  // ============ HANDLE DOWNLOAD ============
+  function handleDownload(id) {
+    if (isWaitingChannel) {
+      openModal('waitingModal');
+      showToast('Vui lòng hoàn thành join kênh trước!', 'info', 2000);
+      return;
+    }
+
+    activeDownloadId = id;
+
+    if (allChannelsJoined()) {
+      showToast('Đã xác nhận đủ kênh. Chuẩn bị link...', 'success', 1500);
+      setTimeout(function() { startCountdown(id); }, 600);
+    } else {
+      startChannelJoining();
+    }
+  }
+
+  // ============ JOIN FLOW ============
+  function startChannelJoining() {
+    var joined = getJoinedChannels();
+    var idx = -1;
+    for (var i = 0; i < CHANNELS.length; i++) {
+      if (joined.indexOf(CHANNELS[i].id) === -1) { idx = i; break; }
+    }
+
+    if (idx === -1) {
+      if (activeDownloadId) {
+        setTimeout(function() { startCountdown(activeDownloadId); }, 400);
+      }
+      return;
+    }
+
+    currentChannelIndex = idx;
+    isWaitingChannel = true;
+
+    // Hiện popup TRƯỚC
+    renderChannelList();
+    openModal('waitingModal');
+
+    // Sau 200ms mở Telegram
+    setTimeout(function() {
+      if (isWaitingChannel) openCurrentChannel();
+    }, 200);
+  }
+
+  function openCurrentChannel() {
+    var ch = CHANNELS[currentChannelIndex];
+    if (!ch) return;
+
+    var timerEl = $('waitingTimer');
+    var hintEl = $('waitingHint');
+    var nameEl = $('currentChannelName');
+    var spinner = $('waitingSpinner');
+
+    if (timerEl) {
+      timerEl.textContent = WAIT_SECONDS + 's';
+      timerEl.classList.remove('done');
+    }
+    if (hintEl) hintEl.textContent = '▌ Đang mở Telegram... ở lại ' + WAIT_SECONDS + 's ▌';
+    if (nameEl) nameEl.textContent = '▶ ' + ch.name;
+    if (spinner) spinner.style.display = 'block';
+
+    // Mở Telegram
+    openUrl(ch.url);
+
+    // Bắt đầu đếm
+    channelWaitStart = Date.now();
+    if (channelWaitInterval) clearInterval(channelWaitInterval);
+
+    channelWaitInterval = setInterval(function() {
+      var elapsed = Math.floor((Date.now() - channelWaitStart) / 1000);
+      var remaining = WAIT_SECONDS - elapsed;
+
+      if (remaining > 0) {
+        if (timerEl) timerEl.textContent = remaining + 's';
+      } else {
+        if (timerEl) {
+          timerEl.textContent = '✓ ĐÃ JOIN';
+          timerEl.classList.add('done');
+        }
+        if (hintEl) hintEl.textContent = '▌ Quay lại tab này để tự động mở kênh tiếp theo... ▌';
+        if (spinner) spinner.style.display = 'none';
+        clearInterval(channelWaitInterval);
+        channelWaitInterval = null;
+      }
+    }, 200);
+
+    attachVisibility();
+  }
+
+  // ============ VISIBILITY ============
+  function attachVisibility() {
+    if (visibilityAttached) return;
+    document.addEventListener('visibilitychange', onVisibilityChange);
+    visibilityAttached = true;
+  }
+
+  function detachVisibility() {
+    if (!visibilityAttached) return;
+    document.removeEventListener('visibilitychange', onVisibilityChange);
+    visibilityAttached = false;
+  }
+
+  function onVisibilityChange() {
+    if (document.visibilityState !== 'visible') return;
+    if (!isWaitingChannel) return;
+    if (!channelWaitStart) return;
+
+    var ch = CHANNELS[currentChannelIndex];
+    if (!ch) return;
+
+    // Đã mark rồi thì bỏ qua
+    if (getJoinedChannels().indexOf(ch.id) !== -1) return;
+
+    var elapsed = Math.floor((Date.now() - channelWaitStart) / 1000);
+
+    if (elapsed >= WAIT_SECONDS) {
+      // Đủ 10s -> mark + next
+      markChannelJoined(ch.id);
+      showToast('✓ Đã join: ' + ch.name, 'success', 1800);
+      renderChannelList();
+
+      // Dừng đếm
+      if (channelWaitInterval) {
+        clearInterval(channelWaitInterval);
+        channelWaitInterval = null;
+      }
+      channelWaitStart = null;
+
+      // Kiểm tra còn kênh không
+      var joined = getJoinedChannels();
+      var nextIdx = -1;
+      for (var i = 0; i < CHANNELS.length; i++) {
+        if (joined.indexOf(CHANNELS[i].id) === -1) { nextIdx = i; break; }
+      }
+
+      if (nextIdx === -1) {
+        // Đủ hết -> countdown
+        isWaitingChannel = false;
+        detachVisibility();
+        closeModal('waitingModal');
+        showToast('🎉 Đã join đủ tất cả kênh!', 'success', 2200);
+        setTimeout(function() {
+          if (activeDownloadId) startCountdown(activeDownloadId);
+        }, 700);
+      } else {
+        // Chuyển kênh tiếp
+        currentChannelIndex = nextIdx;
+        renderChannelList();
+        showToast('→ Đang mở kênh tiếp theo...', 'info', 1500);
+        setTimeout(function() {
+          if (isWaitingChannel) openCurrentChannel();
+        }, 500);
+      }
+    } else {
+      // Chưa đủ 10s
+      var remaining = WAIT_SECONDS - elapsed;
+      var hintEl = $('waitingHint');
+      if (hintEl) hintEl.textContent = '▌ Cần ở lại kênh thêm ' + remaining + 's nữa... ▌';
+      showToast('Vui lòng ở lại kênh thêm ' + remaining + 's!', 'info', 2200);
+    }
+  }
+
+  // ============ COUNTDOWN ============
+  function startCountdown(id) {
+    var numEl = $('countdownNumber');
+    var barEl = $('countdownBar');
+    var count = 3;
+
+    openModal('countdownModal');
+    if (numEl) numEl.textContent = count;
+    if (barEl) barEl.style.width = '100%';
+
+    if (countdownInterval) clearInterval(countdownInterval);
+
+    countdownInterval = setInterval(function() {
+      count--;
+      if (numEl) numEl.textContent = count;
+      if (barEl) barEl.style.width = ((count / 3) * 100) + '%';
+
+      if (count <= 0) {
+        clearInterval(countdownInterval);
+        countdownInterval = null;
+        closeModal('countdownModal');
+        incrementDownloadCount(id);
+        var url = (DEMO_CONFIG[id] && DEMO_CONFIG[id].downloadUrl) || DEMO_CONFIG[1].downloadUrl;
+        showToast('Đang chuyển đến link tải xuống...', 'success', 2000);
+        setTimeout(function() {
+          window.location.href = url;
+        }, 400);
+      }
+    }, 1000);
+  }
+
+  // ============ SUPPORT ============
+  function toggleSupport(e) {
+    if (e) e.stopPropagation();
+    var c = $('floatingSupport');
+    if (c) c.classList.toggle('active');
+  }
+
+  // ============ INIT ============
+  function init() {
+    console.log('[APP] Init');
+
+    // Starfield
+    initStarfield();
+
+    // Load demo images
+    for (var i = 1; i <= 5; i++) {
+      (function(idx) {
+        var img = $('demoFrame' + idx);
+        var body = $('body' + idx);
+        if (!img || !DEMO_CONFIG[idx]) return;
+        img.onload = function() {
+          img.classList.add('loaded');
+          if (body) body.classList.add('loaded');
+        };
+        img.onerror = function() {
+          if (body) body.classList.add('loaded');
+          img.alt = '⚠ Không thể tải ảnh';
+        };
+        img.src = DEMO_CONFIG[idx].demoUrl;
+      })(i);
+    }
+
+    // Show welcome modal
+    setTimeout(function() {
+      openModal('welcomeModal');
+    }, 400);
+
+    // Download counts
+    updateAllDownloadCounts();
+
+    // Close welcome
+    var cw = $('closeWelcomeBtn');
+    if (cw) {
+      cw.addEventListener('click', function() {
+        closeModal('welcomeModal');
+        speakCopyright();
+      });
+    }
+
+    // Download buttons
+    var btns = document.querySelectorAll('.download-btn');
+    for (var j = 0; j < btns.length; j++) {
+      (function(btn) {
+        btn.addEventListener('click', function() {
+          var id = parseInt(btn.getAttribute('data-id'), 10);
+          if (id) handleDownload(id);
+        });
+      })(btns[j]);
+    }
+
+    // Support button
+    var sb = $('supportBtn');
+    if (sb) {
+      sb.addEventListener('click', toggleSupport);
+    }
+
+    // Click outside support
+    document.addEventListener('click', function(e) {
+      var container = $('floatingSupport');
+      if (container && !container.contains(e.target)) {
+        container.classList.remove('active');
+      }
+    });
+
+    // ESC close welcome
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        var modals = document.querySelectorAll('.modal-overlay.active');
+        for (var k = 0; k < modals.length; k++) {
+          var m = modals[k];
+          if (m.id !== 'countdownModal' && m.id !== 'waitingModal') {
+            m.classList.remove('active');
+          }
+        }
+        var c = $('floatingSupport');
+        if (c) c.classList.remove('active');
+      }
+    });
+
+    // First interaction -> speak
+    document.addEventListener('click', function() {
+      speakCopyright();
+    }, { once: true });
+
+    console.log('[APP] Ready');
+  }
+
+  // Boot
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+})();
+</script>
+
+</body>
+</html>
