@@ -17,6 +17,8 @@
   --text-main: #e2e8f0;
   --text-muted: #64748b;
   --border-line: rgba(0, 240, 255, 0.25);
+  --heart-pink: #ff3366;
+  --heart-glow: rgba(255, 51, 102, 0.5);
 }
 
 * {
@@ -117,6 +119,71 @@ body::after {
   94% { transform: translate(2px, -1px); }
   96% { transform: translate(-1px, -1px); }
   98% { transform: translate(1px, 1px); }
+}
+
+/* HEART BUTTON */
+.heart-nav-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 51, 102, 0.08);
+  border: 2px solid var(--heart-pink);
+  color: var(--heart-pink);
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  box-shadow: 0 0 12px var(--heart-glow);
+  flex-shrink: 0;
+}
+
+.heart-nav-btn i {
+  animation: heartbeat 1.4s infinite;
+}
+
+.heart-nav-btn:hover {
+  background: var(--heart-pink);
+  color: #fff;
+  box-shadow: 0 0 25px var(--heart-glow), 0 0 40px var(--heart-glow);
+  transform: scale(1.08);
+}
+
+.heart-nav-btn::after {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  border: 1px solid var(--heart-pink);
+  animation: heartRipple 2s infinite;
+  pointer-events: none;
+}
+
+@keyframes heartRipple {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(1.15); }
+  50% { transform: scale(1); }
+  75% { transform: scale(1.1); }
+}
+
+/* TAB SYSTEM */
+.tab-content {
+  display: none;
+  animation: tabFade 0.4s ease;
+}
+.tab-content.active {
+  display: block;
+}
+@keyframes tabFade {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* MAIN */
@@ -263,6 +330,237 @@ body::after {
   margin-left: 4px;
 }
 
+/* DONATE TAB */
+.donate-container {
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 30px 15px 60px;
+  position: relative;
+  z-index: 2;
+}
+
+.donate-card {
+  background: var(--panel-bg);
+  border: 1px solid var(--heart-pink);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 0 40px rgba(255, 51, 102, 0.25), 0 0 80px rgba(255, 51, 102, 0.1);
+  position: relative;
+}
+
+.donate-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--heart-pink), transparent);
+  animation: scanline 2.5s linear infinite;
+}
+
+@keyframes scanline {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.donate-header {
+  background: rgba(255, 51, 102, 0.08);
+  border-bottom: 1px solid rgba(255, 51, 102, 0.3);
+  padding: 20px;
+  text-align: center;
+}
+
+.donate-header .heart-big {
+  font-size: 2.6rem;
+  color: var(--heart-pink);
+  display: inline-block;
+  animation: heartbeat 1.4s infinite;
+  filter: drop-shadow(0 0 15px var(--heart-glow));
+  margin-bottom: 8px;
+}
+
+.donate-header h2 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.3rem;
+  color: #fff;
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+}
+
+.donate-header p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-family: 'Share Tech Mono', monospace;
+}
+
+.donate-body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.qr-wrapper {
+  background: #fff;
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 0 25px rgba(255, 51, 102, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.qr-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--heart-pink);
+  box-shadow: 0 0 15px var(--heart-pink);
+  animation: qrScan 2.2s ease-in-out infinite;
+}
+
+@keyframes qrScan {
+  0%, 100% { top: 0; }
+  50% { top: 100%; }
+}
+
+.qr-wrapper img {
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+}
+
+.qr-label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.8rem;
+  color: #0d1424;
+  font-weight: 700;
+  letter-spacing: 1px;
+  background: #f0f4ff;
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid #d0d8e8;
+}
+
+.bank-info {
+  background: rgba(255, 51, 102, 0.05);
+  border: 1px dashed rgba(255, 51, 102, 0.4);
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bank-info .info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+}
+
+.bank-info .info-row .label {
+  color: var(--text-muted);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+
+.bank-info .info-row .value {
+  color: #fff;
+  font-weight: 700;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.82rem;
+  text-align: right;
+  word-break: break-all;
+}
+
+.bank-info .info-row .value.highlight {
+  color: var(--free-green);
+  text-shadow: 0 0 10px var(--free-glow);
+}
+
+.copy-btn {
+  background: rgba(0, 240, 255, 0.1);
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  font-size: 0.7rem;
+  padding: 3px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: 'Share Tech Mono', monospace;
+  transition: 0.2s;
+  margin-left: 6px;
+  flex-shrink: 0;
+}
+
+.copy-btn:hover {
+  background: var(--primary);
+  color: #000;
+}
+
+.donate-message {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-main);
+  line-height: 1.6;
+  font-style: italic;
+  padding: 12px;
+  background: rgba(0, 240, 255, 0.03);
+  border-radius: 8px;
+  border-left: 3px solid var(--primary);
+}
+
+.donate-message .thanks {
+  color: var(--heart-pink);
+  font-weight: 700;
+  font-style: normal;
+  display: block;
+  margin-top: 6px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.82rem;
+  letter-spacing: 1px;
+}
+
+.back-btn {
+  width: 100%;
+  padding: 16px;
+  background: rgba(0, 240, 255, 0.08);
+  border: 1px solid var(--primary);
+  border-radius: 8px;
+  color: var(--primary);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-decoration: none;
+}
+
+.back-btn:hover {
+  background: var(--primary);
+  color: #000;
+  box-shadow: 0 0 30px var(--primary-glow);
+  transform: translateY(-2px);
+}
+
+.back-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
 /* SUPPORT */
 .floating-support-container {
   position: fixed;
@@ -385,11 +683,6 @@ footer .heart {
   display: inline-block;
 }
 
-@keyframes heartbeat {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.2); }
-}
-
 /* MODAL */
 .modal-overlay {
   position: fixed;
@@ -471,153 +764,6 @@ footer .heart {
 
 .modal-action-btn:hover { box-shadow: 0 0 20px var(--primary); }
 
-/* JOIN PROGRESS */
-.join-progress-wrap { margin: 10px 0 14px; }
-
-.join-progress-label {
-  display: flex;
-  justify-content: space-between;
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  margin-bottom: 5px;
-}
-
-.join-progress-bar {
-  width: 100%;
-  height: 8px;
-  background: rgba(0, 255, 102, 0.12);
-  border-radius: 4px;
-  overflow: hidden;
-  border: 1px solid rgba(0, 255, 102, 0.25);
-}
-
-.join-progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--free-green), #00ffcc);
-  width: 0%;
-  transition: width 0.5s ease;
-  box-shadow: 0 0 12px var(--free-glow);
-}
-
-.channel-list {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin: 12px 0;
-  max-height: 260px;
-  overflow-y: auto;
-  padding-right: 4px;
-}
-
-.channel-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 9px 11px;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  font-size: 0.8rem;
-  font-weight: 600;
-  transition: 0.25s;
-}
-
-.channel-item.active {
-  background: rgba(0, 240, 255, 0.12);
-  border-color: var(--primary);
-  box-shadow: 0 0 12px var(--primary-glow);
-}
-
-.channel-item.done {
-  background: rgba(0, 255, 102, 0.1);
-  border-color: var(--free-green);
-  color: var(--free-green);
-}
-
-.channel-item .ch-icon {
-  width: 22px;
-  text-align: center;
-  font-size: 1rem;
-}
-
-.channel-item .ch-name {
-  flex: 1;
-  text-align: left;
-  font-size: 0.78rem;
-}
-
-.channel-item .ch-status {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 0.68rem;
-  color: var(--text-muted);
-  min-width: 72px;
-  text-align: right;
-}
-
-.channel-item.done .ch-status { color: var(--free-green); }
-.channel-item.active .ch-status { color: var(--primary); animation: blinkText 1s infinite; }
-
-/* WAITING UI */
-.waiting-spinner {
-  width: 50px;
-  height: 50px;
-  margin: 10px auto;
-  border: 4px solid rgba(0, 255, 102, 0.15);
-  border-top-color: var(--free-green);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin { to { transform: rotate(360deg); } }
-
-.waiting-timer {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 1.6rem;
-  color: var(--free-green);
-  font-weight: 900;
-  letter-spacing: 2px;
-  text-shadow: 0 0 15px var(--free-glow);
-  margin: 8px 0;
-  text-align: center;
-}
-
-.waiting-timer.done {
-  color: #fff;
-  text-shadow: 0 0 20px #fff, 0 0 30px var(--free-green);
-}
-
-.waiting-hint {
-  font-size: 0.78rem;
-  color: var(--text-muted);
-  font-family: 'Share Tech Mono', monospace;
-  margin-top: 8px;
-  text-align: center;
-  line-height: 1.5;
-}
-
-.current-channel-name {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 0.82rem;
-  color: var(--primary);
-  margin-top: 4px;
-  text-align: center;
-  letter-spacing: 1px;
-}
-
-.auto-note {
-  display: inline-block;
-  background: rgba(0, 240, 255, 0.1);
-  border: 1px dashed var(--primary);
-  color: var(--primary);
-  padding: 6px 10px;
-  border-radius: 4px;
-  font-size: 0.72rem;
-  font-family: 'Share Tech Mono', monospace;
-  margin-top: 10px;
-  letter-spacing: 0.5px;
-}
-
 /* COUNTDOWN */
 .countdown-display {
   font-family: 'Orbitron', sans-serif;
@@ -686,6 +832,8 @@ footer .heart {
 
 @media (max-width: 600px) {
   .brand { font-size: 0.9rem; }
+  .heart-nav-btn { width: 40px; height: 40px; font-size: 1.05rem; }
+  .navbar { padding: 12px 16px; }
   .box-header { font-size: 0.72rem; padding: 10px 12px; }
   .box-header .status-tag { display: none; }
   .download-btn { font-size: 0.9rem; padding: 15px; }
@@ -694,8 +842,12 @@ footer .heart {
   .modal-card { padding: 18px; }
   .toast-container { right: 10px; top: 70px; }
   .toast { max-width: 260px; font-size: 0.78rem; }
-  .waiting-timer { font-size: 1.3rem; }
-  .channel-item { font-size: 0.72rem; padding: 7px 9px; }
+  .donate-header h2 { font-size: 1.05rem; }
+  .donate-body { padding: 18px; }
+  .qr-wrapper img { max-width: 240px; }
+  .bank-info .info-row { font-size: 0.78rem; }
+  .bank-info .info-row .value { font-size: 0.75rem; }
+  .donate-header .heart-big { font-size: 2.1rem; }
 }
 
 ::-webkit-scrollbar { width: 8px; }
@@ -712,87 +864,154 @@ footer .heart {
     <i class="fa-solid fa-microchip"></i>
     <span class="glitch" data-text="Hunter Store 🧃">Hunter Store 🧃</span>
   </div>
+
+  <!-- HEART BUTTON - Chuyển sang tab Donate -->
+  <button type="button" class="heart-nav-btn" id="heartNavBtn" aria-label="Donate" title="Ủng hộ tôi ❤">
+    <i class="fa-solid fa-heart"></i>
+  </button>
 </nav>
 
-<div class="main-container">
+<!-- ============ TAB: MOD DOWNLOAD (mặc định) ============ -->
+<div class="tab-content active" id="tabMod">
+  <div class="main-container">
 
-  <div class="dashboard-box">
-    <div class="box-header">
-      <span><i class="fa-solid fa-gamepad"></i> FREE FIRE THƯỜNG IOS #1 <span class="status-tag">HOT</span></span>
-      <span style="font-family:'Share Tech Mono'; font-size:0.75rem; color:var(--text-muted);">#MB-2026-01</span>
+    <div class="dashboard-box">
+      <div class="box-header">
+        <span><i class="fa-solid fa-gamepad"></i> FREE FIRE THƯỜNG IOS #1 <span class="status-tag">HOT</span></span>
+        <span style="font-family:'Share Tech Mono'; font-size:0.75rem; color:var(--text-muted);">#MB-2026-01</span>
+      </div>
+      <div class="box-body" id="body1">
+        <span class="loading-text">▌ LOADING FRAME ▌</span>
+        <img id="demoFrame1" src="" alt="Demo 1">
+      </div>
+      <button type="button" class="download-btn" data-id="1">
+        <i class="fa-solid fa-download"></i> DOWNLOAD #1
+        <span class="download-count">(<span class="dl-count" data-id="1">0</span>)</span>
+      </button>
     </div>
-    <div class="box-body" id="body1">
-      <span class="loading-text">▌ LOADING FRAME ▌</span>
-      <img id="demoFrame1" src="" alt="Demo 1">
+
+    <div class="dashboard-box">
+      <div class="box-header">
+        <span><i class="fa-solid fa-gamepad"></i> FREE FIRE MAX IOS #2 <span class="status-tag">NEW</span></span>
+        <span style="font-family:'Share Tech Mono'; font-size:0.75rem; color:var(--text-muted);">#MB-2026-02</span>
+      </div>
+      <div class="box-body" id="body2">
+        <span class="loading-text">▌ LOADING FRAME ▌</span>
+        <img id="demoFrame2" src="" alt="Demo 2">
+      </div>
+      <button type="button" class="download-btn" data-id="2">
+        <i class="fa-solid fa-download"></i> DOWNLOAD #2
+        <span class="download-count">(<span class="dl-count" data-id="2">0</span>)</span>
+      </button>
     </div>
-    <button type="button" class="download-btn" data-id="1">
-      <i class="fa-solid fa-download"></i> DOWNLOAD #1
-      <span class="download-count">(<span class="dl-count" data-id="1">0</span>)</span>
-    </button>
+
+    <div class="dashboard-box">
+      <div class="box-header">
+        <span><i class="fa-solid fa-gamepad"></i> DỰ ÁN MOD V.I.P #3 <span class="status-tag">VIP</span></span>
+        <span style="font-family:'Share Tech Mono'; font-size:0.75rem; color:var(--text-muted);">#MB-2026-03</span>
+      </div>
+      <div class="box-body" id="body3">
+        <span class="loading-text">▌ LOADING FRAME ▌</span>
+        <img id="demoFrame3" src="" alt="Demo 3">
+      </div>
+      <button type="button" class="download-btn" data-id="3">
+        <i class="fa-solid fa-download"></i> DOWNLOAD #3
+        <span class="download-count">(<span class="dl-count" data-id="3">0</span>)</span>
+      </button>
+    </div>
+
+    <div class="dashboard-box">
+      <div class="box-header">
+        <span><i class="fa-solid fa-gamepad"></i> DỰ ÁN BẢO VỆ #4 <span class="status-tag">SAFE</span></span>
+        <span style="font-family:'Share Tech Mono'; font-size:0.75rem; color:var(--text-muted);">#MB-2026-04</span>
+      </div>
+      <div class="box-body" id="body4">
+        <span class="loading-text">▌ LOADING FRAME ▌</span>
+        <img id="demoFrame4" src="" alt="Demo 4">
+      </div>
+      <button type="button" class="download-btn" data-id="4">
+        <i class="fa-solid fa-download"></i> DOWNLOAD #4
+        <span class="download-count">(<span class="dl-count" data-id="4">0</span>)</span>
+      </button>
+    </div>
+
+    <div class="dashboard-box">
+      <div class="box-header">
+        <span><i class="fa-solid fa-gamepad"></i> BẢN CẬP NHẬT MỚI #5 <span class="status-tag">UPDATE</span></span>
+        <span style="font-family:'Share Tech Mono'; font-size:0.75rem; color:var(--text-muted);">#MB-2026-05</span>
+      </div>
+      <div class="box-body" id="body5">
+        <span class="loading-text">▌ LOADING FRAME ▌</span>
+        <img id="demoFrame5" src="" alt="Demo 5">
+      </div>
+      <button type="button" class="download-btn" data-id="5">
+        <i class="fa-solid fa-download"></i> DOWNLOAD #5
+        <span class="download-count">(<span class="dl-count" data-id="5">0</span>)</span>
+      </button>
+    </div>
+
   </div>
-
-  <div class="dashboard-box">
-    <div class="box-header">
-      <span><i class="fa-solid fa-gamepad"></i> FREE FIRE MAX IOS #2 <span class="status-tag">NEW</span></span>
-      <span style="font-family:'Share Tech Mono'; font-size:0.75rem; color:var(--text-muted);">#MB-2026-02</span>
-    </div>
-    <div class="box-body" id="body2">
-      <span class="loading-text">▌ LOADING FRAME ▌</span>
-      <img id="demoFrame2" src="" alt="Demo 2">
-    </div>
-    <button type="button" class="download-btn" data-id="2">
-      <i class="fa-solid fa-download"></i> DOWNLOAD #2
-      <span class="download-count">(<span class="dl-count" data-id="2">0</span>)</span>
-    </button>
-  </div>
-
-  <div class="dashboard-box">
-    <div class="box-header">
-      <span><i class="fa-solid fa-gamepad"></i> DỰ ÁN MOD V.I.P #3 <span class="status-tag">VIP</span></span>
-      <span style="font-family:'Share Tech Mono'; font-size:0.75rem; color:var(--text-muted);">#MB-2026-03</span>
-    </div>
-    <div class="box-body" id="body3">
-      <span class="loading-text">▌ LOADING FRAME ▌</span>
-      <img id="demoFrame3" src="" alt="Demo 3">
-    </div>
-    <button type="button" class="download-btn" data-id="3">
-      <i class="fa-solid fa-download"></i> DOWNLOAD #3
-      <span class="download-count">(<span class="dl-count" data-id="3">0</span>)</span>
-    </button>
-  </div>
-
-  <div class="dashboard-box">
-    <div class="box-header">
-      <span><i class="fa-solid fa-gamepad"></i> DỰ ÁN BẢO VỆ #4 <span class="status-tag">SAFE</span></span>
-      <span style="font-family:'Share Tech Mono'; font-size:0.75rem; color:var(--text-muted);">#MB-2026-04</span>
-    </div>
-    <div class="box-body" id="body4">
-      <span class="loading-text">▌ LOADING FRAME ▌</span>
-      <img id="demoFrame4" src="" alt="Demo 4">
-    </div>
-    <button type="button" class="download-btn" data-id="4">
-      <i class="fa-solid fa-download"></i> DOWNLOAD #4
-      <span class="download-count">(<span class="dl-count" data-id="4">0</span>)</span>
-    </button>
-  </div>
-
-  <div class="dashboard-box">
-    <div class="box-header">
-      <span><i class="fa-solid fa-gamepad"></i> BẢN CẬP NHẬT MỚI #5 <span class="status-tag">UPDATE</span></span>
-      <span style="font-family:'Share Tech Mono'; font-size:0.75rem; color:var(--text-muted);">#MB-2026-05</span>
-    </div>
-    <div class="box-body" id="body5">
-      <span class="loading-text">▌ LOADING FRAME ▌</span>
-      <img id="demoFrame5" src="" alt="Demo 5">
-    </div>
-    <button type="button" class="download-btn" data-id="5">
-      <i class="fa-solid fa-download"></i> DOWNLOAD #5
-      <span class="download-count">(<span class="dl-count" data-id="5">0</span>)</span>
-    </button>
-  </div>
-
 </div>
 
+<!-- ============ TAB: DONATE ============ -->
+<div class="tab-content" id="tabDonate">
+  <div class="donate-container">
+    <div class="donate-card">
+
+      <div class="donate-header">
+        <div class="heart-big"><i class="fa-solid fa-heart"></i></div>
+        <h2>ỦNG HỘ BEO NHA</h2>
+        <p> Cảm ơn bạn đã đồng hành cùng Hunter Store </p>
+      </div>
+
+      <div class="donate-body">
+
+        <!-- QR CODE -->
+        <div class="qr-wrapper">
+          <img id="qrImage" src="" alt="QR Donate">
+          <span class="qr-label"><i class="fa-solid fa-qrcode"></i> QUÉT MÃ ĐỂ ỦNG HỘ</span>
+        </div>
+
+        <!-- THÔNG TIN NGÂN HÀNG -->
+        <div class="bank-info">
+          <div class="info-row">
+            <span class="label"><i class="fa-solid fa-building-columns"></i> NGÂN HÀNG</span>
+            <span class="value" id="bankName">Zalo Pay</span>
+          </div>
+          <div class="info-row">
+            <span class="label"><i class="fa-solid fa-user"></i> CHỦ TK</span>
+            <span class="value" id="bankOwner">NGUYEN MINH AN</span>
+          </div>
+          <div class="info-row">
+            <span class="label"><i class="fa-solid fa-hashtag"></i> SỐ TK</span>
+            <span class="value">
+              <span id="bankNumber">0949106382</span>
+              <button class="copy-btn" id="copyBankBtn" type="button"><i class="fa-solid fa-copy"></i> COPY</button>
+            </span>
+          </div>
+          <div class="info-row">
+            <span class="la2bel"><i class="fa-solid fa-comment-dots"></i> NỘI DUNG</span>
+            <span class="value highlight" id="bankContent">DONATE HUNTER STORE</span>
+          </div>
+        </div>
+
+        <!-- LỜI CẢM ƠN -->
+        <div class="donate-message">
+          Mọi sự ủng hộ của các bạn là động lực để mình tiếp tục phát triển thêm nhiều mod chất lượng hơn.
+          <span class="thanks">❤ CẢM ƠN BẠN RẤT NHIỀU ❤</span>
+        </div>
+
+        <!-- NÚT QUAY LẠI -->
+        <button type="button" class="back-btn" id="backToModBtn">
+          <i class="fa-solid fa-arrow-left"></i> QUAY LẠI TRANG TẢI MOD
+        </button>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SUPPORT -->
 <div class="floating-support-container" id="floatingSupport">
   <div class="support-popover-menu">
     <div class="popover-header"><i class="fa-solid fa-headset"></i> KÊNH HỖ TRỢ CHÍNH THỨC</div>
@@ -835,8 +1054,8 @@ footer .heart {
     Đặt Mod Theo Yêu Cầu / Vui Lòng Liên Hệ Admin Ở Phần Support</p>
 
     <div class="price-list">
-      <div>▸ Mod Bom Keo — <span class="price">5.000đ</span> / 1 lần</div>
-      <div>▸ Mod Skin Alok — <span class="price">50.000đ</span> / 1 lần</div>
+      <div>▸ Mod Bom Keo — <span class="price">5.000đ</span> </div>
+      <div>▸ Mod Skin Alok — <span class="price">50.000đ</span> </div>
       <div>▸ Mod Skin Ignis Full Hiệu Ứng — <span class="price">75.000đ</span></div>
       <div>▸ Mod Skin Santino — <span class="price">75.000đ</span></div>
       <div>▸ Mod Skin Kapella — <span class="price">75.000đ</span></div>
@@ -845,35 +1064,6 @@ footer .heart {
     </div>
 
     <button type="button" class="modal-action-btn" id="closeWelcomeBtn">ĐÓNG</button>
-  </div>
-</div>
-
-<!-- JOIN MODAL -->
-<div class="modal-overlay" id="waitingModal">
-  <div class="modal-card" style="border-color: var(--free-green); max-width: 430px;">
-    <h3 style="color: var(--free-green);"><i class="fa-brands fa-telegram"></i> YÊU CẦU JOIN KÊNH</h3>
-
-    <div class="join-progress-wrap">
-      <div class="join-progress-label">
-        <span>TIẾN TRÌNH</span>
-        <span id="progressText">0 / 6</span>
-      </div>
-      <div class="join-progress-bar">
-        <div class="join-progress-fill" id="progressFill"></div>
-      </div>
-    </div>
-
-    <div class="channel-list" id="channelList"></div>
-
-    <div class="waiting-spinner" id="waitingSpinner"></div>
-    <div class="waiting-timer" id="waitingTimer">5s</div>
-    <div class="current-channel-name" id="currentChannelName"></div>
-    <div class="waiting-hint" id="waitingHint">▌ Đang mở Telegram... ở lại 10s ▌</div>
-
-    <div class="auto-note">
-      <i class="fa-solid fa-wand-magic-sparkles"></i>
-      HỆ THỐNG TỰ ĐỘNG CHUYỂN KÊNH
-    </div>
   </div>
 </div>
 
@@ -896,17 +1086,7 @@ footer .heart {
   'use strict';
 
   // ============ CONFIG ============
-  var SPEECH_TEXT = "Bản quyền mod thuộc về nguyen minh beo";
-  var WAIT_SECONDS = 10;
-
-  var CHANNELS = [
-    { id: 'c1', name: '@minhbeo001 (Kênh Chính)',   url: 'https://t.me/minhbeo001',    icon: 'fa-brands fa-telegram', color: '#0088cc' },
-    { id: 'c2', name: '@minhbeostore (Kênh Phụ)',   url: 'https://t.me/minhbeostore',  icon: 'fa-brands fa-telegram', color: '#0088cc' },
-    { id: 'c3', name: '@minhbeo003 (Update)',       url: 'https://t.me/minhbeo003',    icon: 'fa-brands fa-telegram', color: '#0088cc' },
-    { id: 'c4', name: '@minhbeo002 (Kênh Chat)',    url: 'https://t.me/minhbeo002',    icon: 'fa-brands fa-telegram', color: '#0088cc' },
-    { id: 'c5', name: '@muadong_paris (Support)',   url: 'https://t.me/muadong_paris', icon: 'fa-brands fa-telegram', color: '#0088cc' },
-    { id: 'c6', name: '@nguyenminhbeo001 (TikTok)', url: 'https://www.tiktok.com/@nguyenminhbeo001', icon: 'fa-brands fa-tiktok', color: '#ff0055' }
-  ];
+  var SPEECH_TEXT = "";
 
   var DEMO_CONFIG = {
     1: { demoUrl: "https://files.catbox.moe/fjhaur.png", downloadUrl: "https://link4m.org/go/sxdtQdV6" },
@@ -916,15 +1096,20 @@ footer .heart {
     5: { demoUrl: "https://files.catbox.moe/fjhaur.png", downloadUrl: "https://link4m.org/go/sxdtQdV6" }
   };
 
+  // ============ DONATE CONFIG (chỉnh sửa tại đây) ============
+  var DONATE_CONFIG = {
+    qrImage: "https://files.catbox.moe/ppa4mu.png",  // Thay bằng link QR của bạn
+    bankName: "ZaloPay",
+    bankOwner: "NGUYEN MINH AN",
+    bankNumber: "0949106382",
+    bankContent: "DONATE HUNTER STORE"
+  };
+
   // ============ STATE ============
   var activeDownloadId = null;
   var hasSpoken = false;
   var countdownInterval = null;
-  var currentChannelIndex = -1;
-  var channelWaitStart = null;
-  var channelWaitInterval = null;
-  var isWaitingChannel = false;
-  var visibilityAttached = false;
+  var currentTab = 'mod';
 
   // ============ STORAGE HELPERS ============
   var memStore = {};
@@ -937,25 +1122,6 @@ footer .heart {
     catch (e) { memStore[k] = v; }
   }
 
-  function getJoinedChannels() {
-    try { return JSON.parse(storeGet('joinedChannels') || '[]'); }
-    catch (e) { return []; }
-  }
-  function markChannelJoined(id) {
-    var arr = getJoinedChannels();
-    if (arr.indexOf(id) === -1) {
-      arr.push(id);
-      storeSet('joinedChannels', JSON.stringify(arr));
-    }
-  }
-  function allChannelsJoined() {
-    var arr = getJoinedChannels();
-    for (var i = 0; i < CHANNELS.length; i++) {
-      if (arr.indexOf(CHANNELS[i].id) === -1) return false;
-    }
-    return true;
-  }
-
   // ============ DOM HELPERS ============
   function $(id) { return document.getElementById(id); }
 
@@ -966,6 +1132,25 @@ footer .heart {
   function closeModal(id) {
     var el = $(id);
     if (el) el.classList.remove('active');
+  }
+
+  // ============ TAB SWITCHING ============
+  function switchTab(tab) {
+    currentTab = tab;
+    var tabMod = $('tabMod');
+    var tabDonate = $('tabDonate');
+
+    if (tab === 'donate') {
+      if (tabMod) tabMod.classList.remove('active');
+      if (tabDonate) tabDonate.classList.add('active');
+      // Cuộn lên đầu trang
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      showToast('❤ Chuyển sang trang ủng hộ', 'info', 1800);
+    } else {
+      if (tabDonate) tabDonate.classList.remove('active');
+      if (tabMod) tabMod.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }
 
   // ============ TOAST ============
@@ -1072,218 +1257,10 @@ footer .heart {
     updateAllDownloadCounts();
   }
 
-  // ============ RENDER CHANNEL LIST ============
-  function renderChannelList() {
-    var list = $('channelList');
-    if (!list) return;
-    var joined = getJoinedChannels();
-    list.innerHTML = '';
-
-    for (var i = 0; i < CHANNELS.length; i++) {
-      var ch = CHANNELS[i];
-      var done = joined.indexOf(ch.id) !== -1;
-      var active = !done && i === currentChannelIndex;
-
-      var item = document.createElement('div');
-      item.className = 'channel-item' + (done ? ' done' : '') + (active ? ' active' : '');
-
-      var status = done ? '✓ ĐÃ JOIN' : (active ? 'ĐANG MỞ...' : 'CHƯA JOIN');
-      item.innerHTML =
-        '<span class="ch-icon" style="color:' + ch.color + ';"><i class="' + ch.icon + '"></i></span>' +
-        '<span class="ch-name">' + ch.name + '</span>' +
-        '<span class="ch-status">' + status + '</span>';
-
-      list.appendChild(item);
-    }
-
-    var total = CHANNELS.length;
-    var doneCount = joined.length;
-    var pt = $('progressText');
-    var pf = $('progressFill');
-    if (pt) pt.textContent = doneCount + ' / ' + total;
-    if (pf) pf.style.width = ((doneCount / total) * 100) + '%';
-  }
-
-  // ============ OPEN URL ============
-  function openUrl(url) {
-    try {
-      var a = document.createElement('a');
-      a.href = url;
-      a.target = '_blank';
-      a.rel = 'noopener noreferrer';
-      a.style.display = 'none';
-      document.body.appendChild(a);
-      a.click();
-      setTimeout(function() {
-        if (a.parentNode) a.parentNode.removeChild(a);
-      }, 200);
-    } catch (e) {
-      try { window.open(url, '_blank'); } catch (e2) {}
-    }
-  }
-
-  // ============ HANDLE DOWNLOAD ============
+  // ============ HANDLE DOWNLOAD (đã xoá yêu cầu join kênh) ============
   function handleDownload(id) {
-    if (isWaitingChannel) {
-      openModal('waitingModal');
-      showToast('Vui lòng hoàn thành join kênh trước!', 'info', 2000);
-      return;
-    }
-
     activeDownloadId = id;
-
-    if (allChannelsJoined()) {
-      showToast('Đã xác nhận đủ kênh. Chuẩn bị link...', 'success', 1500);
-      setTimeout(function() { startCountdown(id); }, 600);
-    } else {
-      startChannelJoining();
-    }
-  }
-
-  // ============ JOIN FLOW ============
-  function startChannelJoining() {
-    var joined = getJoinedChannels();
-    var idx = -1;
-    for (var i = 0; i < CHANNELS.length; i++) {
-      if (joined.indexOf(CHANNELS[i].id) === -1) { idx = i; break; }
-    }
-
-    if (idx === -1) {
-      if (activeDownloadId) {
-        setTimeout(function() { startCountdown(activeDownloadId); }, 400);
-      }
-      return;
-    }
-
-    currentChannelIndex = idx;
-    isWaitingChannel = true;
-
-    // Hiện popup TRƯỚC
-    renderChannelList();
-    openModal('waitingModal');
-
-    // Sau 200ms mở Telegram
-    setTimeout(function() {
-      if (isWaitingChannel) openCurrentChannel();
-    }, 200);
-  }
-
-  function openCurrentChannel() {
-    var ch = CHANNELS[currentChannelIndex];
-    if (!ch) return;
-
-    var timerEl = $('waitingTimer');
-    var hintEl = $('waitingHint');
-    var nameEl = $('currentChannelName');
-    var spinner = $('waitingSpinner');
-
-    if (timerEl) {
-      timerEl.textContent = WAIT_SECONDS + 's';
-      timerEl.classList.remove('done');
-    }
-    if (hintEl) hintEl.textContent = '▌ Đang mở Telegram... ở lại ' + WAIT_SECONDS + 's ▌';
-    if (nameEl) nameEl.textContent = '▶ ' + ch.name;
-    if (spinner) spinner.style.display = 'block';
-
-    // Mở Telegram
-    openUrl(ch.url);
-
-    // Bắt đầu đếm
-    channelWaitStart = Date.now();
-    if (channelWaitInterval) clearInterval(channelWaitInterval);
-
-    channelWaitInterval = setInterval(function() {
-      var elapsed = Math.floor((Date.now() - channelWaitStart) / 1000);
-      var remaining = WAIT_SECONDS - elapsed;
-
-      if (remaining > 0) {
-        if (timerEl) timerEl.textContent = remaining + 's';
-      } else {
-        if (timerEl) {
-          timerEl.textContent = '✓ ĐÃ JOIN';
-          timerEl.classList.add('done');
-        }
-        if (hintEl) hintEl.textContent = '▌ Quay lại tab này để tự động mở kênh tiếp theo... ▌';
-        if (spinner) spinner.style.display = 'none';
-        clearInterval(channelWaitInterval);
-        channelWaitInterval = null;
-      }
-    }, 200);
-
-    attachVisibility();
-  }
-
-  // ============ VISIBILITY ============
-  function attachVisibility() {
-    if (visibilityAttached) return;
-    document.addEventListener('visibilitychange', onVisibilityChange);
-    visibilityAttached = true;
-  }
-
-  function detachVisibility() {
-    if (!visibilityAttached) return;
-    document.removeEventListener('visibilitychange', onVisibilityChange);
-    visibilityAttached = false;
-  }
-
-  function onVisibilityChange() {
-    if (document.visibilityState !== 'visible') return;
-    if (!isWaitingChannel) return;
-    if (!channelWaitStart) return;
-
-    var ch = CHANNELS[currentChannelIndex];
-    if (!ch) return;
-
-    // Đã mark rồi thì bỏ qua
-    if (getJoinedChannels().indexOf(ch.id) !== -1) return;
-
-    var elapsed = Math.floor((Date.now() - channelWaitStart) / 1000);
-
-    if (elapsed >= WAIT_SECONDS) {
-      // Đủ 10s -> mark + next
-      markChannelJoined(ch.id);
-      showToast('✓ Đã join: ' + ch.name, 'success', 1800);
-      renderChannelList();
-
-      // Dừng đếm
-      if (channelWaitInterval) {
-        clearInterval(channelWaitInterval);
-        channelWaitInterval = null;
-      }
-      channelWaitStart = null;
-
-      // Kiểm tra còn kênh không
-      var joined = getJoinedChannels();
-      var nextIdx = -1;
-      for (var i = 0; i < CHANNELS.length; i++) {
-        if (joined.indexOf(CHANNELS[i].id) === -1) { nextIdx = i; break; }
-      }
-
-      if (nextIdx === -1) {
-        // Đủ hết -> countdown
-        isWaitingChannel = false;
-        detachVisibility();
-        closeModal('waitingModal');
-        showToast('🎉 Đã join đủ tất cả kênh!', 'success', 2200);
-        setTimeout(function() {
-          if (activeDownloadId) startCountdown(activeDownloadId);
-        }, 700);
-      } else {
-        // Chuyển kênh tiếp
-        currentChannelIndex = nextIdx;
-        renderChannelList();
-        showToast('→ Đang mở kênh tiếp theo...', 'info', 1500);
-        setTimeout(function() {
-          if (isWaitingChannel) openCurrentChannel();
-        }, 500);
-      }
-    } else {
-      // Chưa đủ 10s
-      var remaining = WAIT_SECONDS - elapsed;
-      var hintEl = $('waitingHint');
-      if (hintEl) hintEl.textContent = '▌ Cần ở lại kênh thêm ' + remaining + 's nữa... ▌';
-      showToast('Vui lòng ở lại kênh thêm ' + remaining + 's!', 'info', 2200);
-    }
+    startCountdown(id);
   }
 
   // ============ COUNTDOWN ============
@@ -1324,14 +1301,81 @@ footer .heart {
     if (c) c.classList.toggle('active');
   }
 
+  // ============ DONATE ============
+  function initDonate() {
+    // Gán QR image
+    var qr = $('qrImage');
+    if (qr && DONATE_CONFIG.qrImage) {
+      qr.src = DONATE_CONFIG.qrImage;
+      qr.onerror = function() {
+        qr.alt = '⚠ Không thể tải QR';
+      };
+    }
+
+    // Gán thông tin ngân hàng
+    var bn = $('bankName');
+    var bo = $('bankOwner');
+    var bnum = $('bankNumber');
+    var bc = $('bankContent');
+    if (bn) bn.textContent = DONATE_CONFIG.bankName;
+    if (bo) bo.textContent = DONATE_CONFIG.bankOwner;
+    if (bnum) bnum.textContent = DONATE_CONFIG.bankNumber;
+    if (bc) bc.textContent = DONATE_CONFIG.bankContent;
+
+    // Copy button
+    var copyBtn = $('copyBankBtn');
+    if (copyBtn) {
+      copyBtn.addEventListener('click', function() {
+        var text = DONATE_CONFIG.bankNumber;
+        copyToClipboard(text);
+        showToast('📋 Đã copy số tài khoản: ' + text, 'success', 2000);
+      });
+    }
+
+    // Heart button -> chuyển tab donate
+    var heartBtn = $('heartNavBtn');
+    if (heartBtn) {
+      heartBtn.addEventListener('click', function() {
+        if (currentTab === 'donate') {
+          switchTab('mod');
+        } else {
+          switchTab('donate');
+        }
+      });
+    }
+
+    // Back button -> quay lại tab mod
+    var backBtn = $('backToModBtn');
+    if (backBtn) {
+      backBtn.addEventListener('click', function() {
+        switchTab('mod');
+      });
+    }
+  }
+
+  function copyToClipboard(text) {
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text);
+      } else {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    } catch (e) {}
+  }
+
   // ============ INIT ============
   function init() {
     console.log('[APP] Init');
 
-    // Starfield
     initStarfield();
 
-    // Load demo images
     for (var i = 1; i <= 5; i++) {
       (function(idx) {
         var img = $('demoFrame' + idx);
@@ -1349,15 +1393,12 @@ footer .heart {
       })(i);
     }
 
-    // Show welcome modal
     setTimeout(function() {
       openModal('welcomeModal');
     }, 400);
 
-    // Download counts
     updateAllDownloadCounts();
 
-    // Close welcome
     var cw = $('closeWelcomeBtn');
     if (cw) {
       cw.addEventListener('click', function() {
@@ -1366,7 +1407,6 @@ footer .heart {
       });
     }
 
-    // Download buttons
     var btns = document.querySelectorAll('.download-btn');
     for (var j = 0; j < btns.length; j++) {
       (function(btn) {
@@ -1377,13 +1417,11 @@ footer .heart {
       })(btns[j]);
     }
 
-    // Support button
     var sb = $('supportBtn');
     if (sb) {
       sb.addEventListener('click', toggleSupport);
     }
 
-    // Click outside support
     document.addEventListener('click', function(e) {
       var container = $('floatingSupport');
       if (container && !container.contains(e.target)) {
@@ -1391,13 +1429,12 @@ footer .heart {
       }
     });
 
-    // ESC close welcome
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
         var modals = document.querySelectorAll('.modal-overlay.active');
         for (var k = 0; k < modals.length; k++) {
           var m = modals[k];
-          if (m.id !== 'countdownModal' && m.id !== 'waitingModal') {
+          if (m.id !== 'countdownModal') {
             m.classList.remove('active');
           }
         }
@@ -1406,15 +1443,16 @@ footer .heart {
       }
     });
 
-    // First interaction -> speak
     document.addEventListener('click', function() {
       speakCopyright();
     }, { once: true });
 
+    // Donate init
+    initDonate();
+
     console.log('[APP] Ready');
   }
 
-  // Boot
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {
